@@ -10,7 +10,8 @@ use namespace::autoclean;
 use File::HomeDir;
 use Path::Class::Dir;
 use Config::Any;
-use MooseX::Types::Path::Class;
+use MooseX::Types::Moose qw(ArrayRef HashRef);
+use MooseX::Types::Path::Class qw(File);
 
 =method config_filename
 
@@ -30,7 +31,7 @@ Allows coercion from Str.
 
 has 'config_file' => (
     is         => 'ro',
-    isa        => 'Path::Class::File',
+    isa        => File,
     coerce     => 1,
     lazy_build => 1,
 );
@@ -47,14 +48,13 @@ sub _build_config_file {
 =attr config_files
 
 The collection of filenames the configuration is read from. Array reference
-of L<Path::Class::File> objects.  Allows coercion from Str.
+of L<Path::Class::File> objects.
 
 =cut
 
 has 'config_files' => (
     is         => 'ro',
-    isa        => 'ArrayRef[Path::Class::File]',
-    coerce     => 1,
+    isa        => ArrayRef[File],
     lazy_build => 1,
 );
 sub _build_config_files {
@@ -71,7 +71,7 @@ specified files.
 
 has 'config' => (
     is         => 'ro',
-    isa        => 'HashRef',
+    isa        => HashRef,
     lazy_build => 1,
 );
 
@@ -130,10 +130,10 @@ returns for your particular platform.
 
 The config file is loaded by using L<Config::Any>'s C<load_files()> method.
 It will load the files specified in the C<config_files> attribute.  By default
-this is an array reference that contains the absolute filename from the
+this is an array reference that contains the filename from the
 C<config_file> attribute.
 
-The C<<Config::Any->load_files()>> flag C<use_ext> is set to a true value, so you
+The C<< Config::Any->load_files() >> flag C<use_ext> is set to a true value, so you
 can use any configuration file format supported by L<Config::Any> by just
 specifying the common filename extension for the format.
 
