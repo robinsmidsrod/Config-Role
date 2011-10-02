@@ -1,0 +1,180 @@
+# NAME
+
+Config::Role - Moose config attribute loaded from config file
+
+# VERSION
+
+version 0.0.1
+
+# SYNOPSIS
+
+    package My::Class;
+    use Moose;
+
+    # Read configuration from ~/.my_class.ini, available in $self->config
+    has 'config_filename' => ( is => 'ro', isa => 'Str', lazy_build => 1 );
+    sub _build_config_filename { '.my_class.ini' }
+    with 'Config::Role';
+
+    # Fetch a value from the configuration, allow constructor override
+    has 'username' => ( is => 'ro', isa => 'Str', lazy_build => 1 );
+    sub _build_api_key { return (shift)->config->{'username'}; }
+
+    sub make_request {
+        my ($self) = @_;
+        my $response = My::Class::Request->make(
+            username => $self->username,
+            ...
+        );
+        ...
+    }
+
+# DESCRIPTION
+
+Config::Role is a very basic role you can add to your Moose class that
+allows it to take configuration data from a file located in your home
+directory instead of always requiring parameters to be specified in the
+constructor.
+
+The synopsis shows how you can read the value of `username` from the file
+`.my_class.ini` located in the home directory of the current user.  The
+location of the file is determined by whatever `File::HomeDir->my_data`
+returns for your particular platform.
+
+The config file is loaded by using [Config::Any](http://search.cpan.org/perldoc?Config::Any)'s `load_files()` method.
+It will load the files specified in the `config_files` attribute.  By default
+this is an array reference that contains the absolute filename from the
+`config_file` attribute.
+
+The `<Config::Any-`load_files()>> flag `use_ext` is set to a true value, so you
+can use any configuration file format supported by [Config::Any](http://search.cpan.org/perldoc?Config::Any) by just
+specifying the common filename extension for the format.
+
+# ATTRIBUTES
+
+## config_file
+
+The filename the configuration is read from. A Path::Class::File object.
+Allows coercion from Str.
+
+## config_files
+
+The collection of filenames the configuration is read from. Array reference
+of [Path::Class::File](http://search.cpan.org/perldoc?Path::Class::File) objects.  Allows coercion from Str.
+
+## config
+
+A hash reference that holds the compiled configuration read from the
+specified files.
+
+# METHODS
+
+## config_filename
+
+Required method on the composing class. Should return a string with the name
+of the configuration file name.
+
+# SEMANTIC VERSIONING
+
+This module uses semantic versioning concepts from [http://semver.org/](http://semver.org/).
+
+# SEE ALSO
+
+- [Moose](http://search.cpan.org/perldoc?Moose)
+- [File::HomeDir](http://search.cpan.org/perldoc?File::HomeDir)
+- [Config::Any](http://search.cpan.org/perldoc?Config::Any)
+- [Path::Class::File](http://search.cpan.org/perldoc?Path::Class::File)
+
+# SUPPORT
+
+## Perldoc
+
+You can find documentation for this module with the perldoc command.
+
+  perldoc Config::Role
+
+## Websites
+
+The following websites have more information about this module, and may be of help to you. As always,
+in addition to those websites please use your favorite search engine to discover more resources.
+
+- Search CPAN
+
+The default CPAN search engine, useful to view POD in HTML format.
+
+[http://search.cpan.org/dist/Config-Role](http://search.cpan.org/dist/Config-Role)
+
+- RT: CPAN's Bug Tracker
+
+The RT ( Request Tracker ) website is the default bug/issue tracking system for CPAN.
+
+[http://rt.cpan.org/NoAuth/Bugs.html?Dist=Config-Role](http://rt.cpan.org/NoAuth/Bugs.html?Dist=Config-Role)
+
+- AnnoCPAN
+
+The AnnoCPAN is a website that allows community annonations of Perl module documentation.
+
+[http://annocpan.org/dist/Config-Role](http://annocpan.org/dist/Config-Role)
+
+- CPAN Ratings
+
+The CPAN Ratings is a website that allows community ratings and reviews of Perl modules.
+
+[http://cpanratings.perl.org/d/Config-Role](http://cpanratings.perl.org/d/Config-Role)
+
+- CPAN Forum
+
+The CPAN Forum is a web forum for discussing Perl modules.
+
+[http://cpanforum.com/dist/Config-Role](http://cpanforum.com/dist/Config-Role)
+
+- CPANTS
+
+The CPANTS is a website that analyzes the Kwalitee ( code metrics ) of a distribution.
+
+[http://cpants.perl.org/dist/overview/Config-Role](http://cpants.perl.org/dist/overview/Config-Role)
+
+- CPAN Testers
+
+The CPAN Testers is a network of smokers who run automated tests on uploaded CPAN distributions.
+
+[http://www.cpantesters.org/distro/C/Config-Role](http://www.cpantesters.org/distro/C/Config-Role)
+
+- CPAN Testers Matrix
+
+The CPAN Testers Matrix is a website that provides a visual way to determine what Perls/platforms PASSed for a distribution.
+
+[http://matrix.cpantesters.org/?dist=Config-Role](http://matrix.cpantesters.org/?dist=Config-Role)
+
+- CPAN Testers Dependencies
+
+The CPAN Testers Dependencies is a website that shows a chart of the test results of all dependencies for a distribution.
+
+[http://deps.cpantesters.org/?module=Config::Role](http://deps.cpantesters.org/?module=Config::Role)
+
+## Bugs / Feature Requests
+
+Please report any bugs or feature requests by email to `bug-config-role at rt.cpan.org`, or through
+the web interface at [http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Config-Role](http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Config-Role). You will be automatically notified of any
+progress on the request by the system.
+
+## Source Code
+
+The code is open to the world, and available for you to hack on. Please feel free to browse it and play
+with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
+from your repository :)
+
+[http://github.com/robinsmidsrod/Config-Role](http://github.com/robinsmidsrod/Config-Role)
+
+  git clone git://github.com/robinsmidsrod/Config-Role.git
+
+# AUTHOR
+
+Robin Smidsrød <robin@smidsrod.no>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Robin Smidsrød.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
