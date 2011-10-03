@@ -18,7 +18,7 @@ version 0.0.1
 
     # Fetch a value from the configuration, allow constructor override
     has 'username' => ( is => 'ro', isa => 'Str', lazy_build => 1 );
-    sub _build_api_key { return (shift)->config->{'username'}; }
+    sub _build_username { return (shift)->config->{'username'}; }
 
     sub make_request {
         my ($self) = @_;
@@ -43,10 +43,10 @@ returns for your particular platform.
 
 The config file is loaded by using [Config::Any](http://search.cpan.org/perldoc?Config::Any)'s `load_files()` method.
 It will load the files specified in the `config_files` attribute.  By default
-this is an array reference that contains the absolute filename from the
+this is an array reference that contains the filename from the
 `config_file` attribute.
 
-The `<Config::Any-`load_files()>> flag `use_ext` is set to a true value, so you
+The `Config::Any->load_files()` flag `use_ext` is set to a true value, so you
 can use any configuration file format supported by [Config::Any](http://search.cpan.org/perldoc?Config::Any) by just
 specifying the common filename extension for the format.
 
@@ -60,7 +60,7 @@ Allows coercion from Str.
 ## config_files
 
 The collection of filenames the configuration is read from. Array reference
-of [Path::Class::File](http://search.cpan.org/perldoc?Path::Class::File) objects.  Allows coercion from Str.
+of [Path::Class::File](http://search.cpan.org/perldoc?Path::Class::File) objects.
 
 ## config
 

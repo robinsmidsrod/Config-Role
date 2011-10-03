@@ -104,7 +104,7 @@ __END__
 
     # Fetch a value from the configuration, allow constructor override
     has 'username' => ( is => 'ro', isa => 'Str', lazy_build => 1 );
-    sub _build_api_key { return (shift)->config->{'username'}; }
+    sub _build_username { return (shift)->config->{'username'}; }
 
     sub make_request {
         my ($self) = @_;
