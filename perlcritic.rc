@@ -1,11 +1,11 @@
 severity = 4
 
 # These modules set strict/warnings automatically
-#[TestingAndDebugging::RequireUseStrict]
-#equivalent_modules = XML::Rabbit XML::Rabbit::Root
+[TestingAndDebugging::RequireUseStrict]
+equivalent_modules =
 
-#[TestingAndDebugging::RequireUseWarnings]
-#equivalent_modules = XML::Rabbit XML::Rabbit::Root
+[TestingAndDebugging::RequireUseWarnings]
+equivalent_modules =
 
 # These policies we don't use
 [-Miscellanea::RequireRcsKeywords]
