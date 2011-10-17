@@ -61,7 +61,7 @@ sub _build_config_file {
 =attr config_files
 
 The collection of filenames the configuration is read from. Array reference
-of L<Path::Class::File> objects.
+of L<Path::Class::File> objects. Allows coercion from C<ArrayRef[Str]>.
 
 =cut
 
