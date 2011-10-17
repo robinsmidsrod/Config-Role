@@ -9,9 +9,22 @@ use namespace::autoclean;
 
 use File::HomeDir;
 use Path::Class::Dir;
+use Path::Class::File;
 use Config::Any;
-use MooseX::Types::Moose qw(ArrayRef HashRef);
-use MooseX::Types::Path::Class qw(File);
+use MooseX::Types::Moose qw(ArrayRef HashRef Str Object);
+
+use MooseX::Types -declare => [qw( File ArrayRefOfFile )];
+subtype File,
+    as Object,
+    where { $_->isa('Path::Class::File') };
+coerce File,
+    from Str,
+    via { Path::Class::File->new($_) };
+subtype ArrayRefOfFile,
+    as ArrayRef[File];
+coerce ArrayRefOfFile,
+    from ArrayRef[Str],
+    via { [ map { to_File($_) } @$_ ] };
 
 =method config_filename
 
@@ -54,7 +67,8 @@ of L<Path::Class::File> objects.
 
 has 'config_files' => (
     is         => 'ro',
-    isa        => ArrayRef[File],
+    isa        => ArrayRefOfFile,
+    coerce     => 1,
     lazy_build => 1,
 );
 sub _build_config_files {
@@ -129,9 +143,11 @@ location of the file is determined by whatever C<< File::HomeDir->my_data >>
 returns for your particular platform.
 
 The config file is loaded by using L<Config::Any>'s C<load_files()> method.
-It will load the files specified in the C<config_files> attribute.  By default
-this is an array reference that contains the filename from the
-C<config_file> attribute.
+It will load the files specified in the C<config_files> attribute.  By
+default this is an array reference that contains the filename from the
+C<config_file> attribute.  If you specify multiple files which both contain
+the same configuration key, the value is loaded from the first file.  That
+is, the most significant file should be first in the array.
 
 The C<< Config::Any->load_files() >> flag C<use_ext> is set to a true value, so you
 can use any configuration file format supported by L<Config::Any> by just

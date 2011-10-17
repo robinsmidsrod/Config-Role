@@ -42,9 +42,11 @@ location of the file is determined by whatever `File::HomeDir->my_data`
 returns for your particular platform.
 
 The config file is loaded by using [Config::Any](http://search.cpan.org/perldoc?Config::Any)'s `load_files()` method.
-It will load the files specified in the `config_files` attribute.  By default
-this is an array reference that contains the filename from the
-`config_file` attribute.
+It will load the files specified in the `config_files` attribute.  By
+default this is an array reference that contains the filename from the
+`config_file` attribute.  If you specify multiple files which both contain
+the same configuration key, the value is loaded from the first file.  That
+is, the most significant file should be first in the array.
 
 The `Config::Any->load_files()` flag `use_ext` is set to a true value, so you
 can use any configuration file format supported by [Config::Any](http://search.cpan.org/perldoc?Config::Any) by just
