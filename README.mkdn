@@ -1,6 +1,6 @@
 # NAME
 
-Config::Role - Moose config attribute loaded from config file
+Config::Role - Moose config attribute loaded from file in home dir
 
 # VERSION
 

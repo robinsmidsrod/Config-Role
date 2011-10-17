@@ -5,7 +5,7 @@ package Config::Role;
 use Moose::Role;
 use namespace::autoclean;
 
-# ABSTRACT: Moose config attribute loaded from config file
+# ABSTRACT: Moose config attribute loaded from file in home dir
 
 use File::HomeDir;
 use Path::Class::Dir;
