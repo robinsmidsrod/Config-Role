@@ -62,7 +62,8 @@ Allows coercion from Str.
 ## config_files
 
 The collection of filenames the configuration is read from. Array reference
-of [Path::Class::File](http://search.cpan.org/perldoc?Path::Class::File) objects. Allows coercion from `ArrayRef[Str]`.
+of [Path::Class::File](http://search.cpan.org/perldoc?Path::Class::File) objects.  Allows coercion from an array reference of
+strings.
 
 ## config
 
