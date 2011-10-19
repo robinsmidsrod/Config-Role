@@ -186,12 +186,19 @@ Otherwise they are pretty similar in terms of what they do.
 
 =head1 TODO
 
-=for :list
-* Generate config_filename automatically from the compositing class. Get
+=over 4
+
+=item *
+
+Generate config_filename automatically from the compositing class. Get
 class name from compositing class, convert :: into _ and lowercase.
-* A nicely named sugar function could be exported to allow less boilerplate
+
+=item *
+
+A nicely named sugar function could be exported to allow less boilerplate
 in generating attributes that default to config values.
 
+=back
 
 =head1 SEMANTIC VERSIONING
 
