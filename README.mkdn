@@ -4,7 +4,7 @@ Config::Role - Moose config attribute loaded from file in home dir
 
 # VERSION
 
-version 0.0.1
+version 0.1.0
 
 # SYNOPSIS
 
@@ -60,6 +60,12 @@ can use any configuration file format supported by [Config::Any](http://search.c
 specifying the common filename extension for the format.
 
 # ATTRIBUTES
+
+## config_dir
+
+The directory where the configuration file is located. A Path::Class::Dir
+object.  Defaults to `File::HomeDir->my_data`.  Allows coercion from
+Str.
 
 ## config_file
 

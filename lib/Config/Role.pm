@@ -13,7 +13,13 @@ use Path::Class::File;
 use Config::Any;
 use MooseX::Types::Moose qw(ArrayRef HashRef Str Object);
 
-use MooseX::Types -declare => [qw( File ArrayRefOfFile )];
+use MooseX::Types -declare => [qw( Dir File ArrayRefOfFile )];
+subtype Dir,
+    as Object,
+    where { $_->isa('Path::Class::Dir') };
+coerce Dir,
+    from Str,
+    via { Path::Class::Dir->new($_) };
 subtype File,
     as Object,
     where { $_->isa('Path::Class::File') };
@@ -35,6 +41,26 @@ of the configuration file name.
 
 requires 'config_filename';
 
+=attr config_dir
+
+The directory where the configuration file is located. A Path::Class::Dir
+object.  Defaults to C<< File::HomeDir->my_data >>.  Allows coercion from
+Str.
+
+=cut
+
+has 'config_dir' => (
+    is         => 'ro',
+    isa        => Dir,
+    coerce     => 1,
+    lazy_build => 1,
+);
+
+sub _build_config_dir {
+    my ($self) = @_;
+    return Path::Class::Dir->new(File::HomeDir->my_data);
+}
+
 =attr config_file
 
 The filename the configuration is read from. A Path::Class::File object.
@@ -51,11 +77,9 @@ has 'config_file' => (
 
 sub _build_config_file {
     my ($self) = @_;
-    my $home = File::HomeDir->my_data;
-    my $conf_file = Path::Class::Dir->new($home)->file(
+    return $self->config_dir->file(
         $self->config_filename
     );
-    return $conf_file;
 }
 
 =attr config_files
