@@ -19,17 +19,17 @@ can_ok($obj, qw(
     config_file
     config
 ));
-is( $obj->config_file, 't/my_class.ini', 'config_file attribute resolved correctly' );
+is( $obj->config_file, 't/.my_class.ini', 'config_file attribute resolved correctly' );
 is( ref($obj->config), ref({}), 'config attribute is a hashref' );
 is( $obj->username, 'robin', 'required attribute username found in config' );
 
-my $obj2 = My::Class->new( config_file => 't/missing.ini' );
+my $obj2 = My::Class->new( config_file => 't/.missing.ini' );
 is_deeply( $obj2->config, {}, 'missing config file should give empty config' );
 
 my $obj3 = My::Class->new(
     config_files => [
-        't/my_class.ini',
-        't/my_other_class.ini',
+        't/.my_class.ini',
+        't/.my_other_class.ini',
     ],
 );
 is( scalar @{ $obj3->config_files }, 2, "two config files specified" );
@@ -39,9 +39,9 @@ BEGIN {
     package My::Class;
     use Moose;
 
-    # Read configuration from ~/my_class.ini, available in $self->config
+    # Read configuration from ~/.my_class.ini, available in $self->config
     has 'config_filename' => ( is => 'ro', isa => 'Str', lazy_build => 1 );
-    sub _build_config_filename { 'my_class.ini' }
+    sub _build_config_filename { '.my_class.ini' }
     with 'Config::Role';
 
     # Fetch a value from the configuration, allow constructor override
