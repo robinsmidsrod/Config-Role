@@ -155,6 +155,44 @@ can use any configuration file format supported by L<Config::Any> by just
 specifying the common filename extension for the format.
 
 
+=head1 RATIONALE
+
+This is the problem Config::Role was created to solve: Give me a config
+attribute (hashref) which is read from a file in my home directory to give
+other attributes default values, with configurability to choose the file's
+location and name.
+
+
+=head1 COMPARISON TO L<MooseX::ConfigFromFile>
+
+Config::Role doesn't require you to use anything else than C<< $class->new() >> to
+actually get the benefit of automatic config loading.  Someone might see this as
+negative, as it gives a minor performance penalty even if the config file is
+not present.
+
+Config::Role uses L<File::HomeDir> to default to a known location, so you
+only need to specify the file name you use, not a full path.  This should
+give better cross-platform compatibility, together with the use of
+Path::Class for all file system manipulation.
+
+Also, with Config::Role you must explicitly specify in the builder of an
+attribute that you want to use values from the config file.
+MooseX::ConfigFromFile seems to do that for you.  You also get the benefit
+that the configuration file keys and the class attribute names does not need
+to map 1-to-1 (someone will probably see that as a bad thing).
+
+Otherwise they are pretty similar in terms of what they do.
+
+
+=head1 TODO
+
+=for :list
+* Generate config_filename automatically from the compositing class. Get
+class name from compositing class, convert :: into _ and lowercase.
+* A nicely named sugar function could be exported to allow less boilerplate
+in generating attributes that default to config values.
+
+
 =head1 SEMANTIC VERSIONING
 
 This module uses semantic versioning concepts from L<http://semver.org/>.
@@ -167,3 +205,4 @@ This module uses semantic versioning concepts from L<http://semver.org/>.
 * L<File::HomeDir>
 * L<Config::Any>
 * L<Path::Class::File>
+* L<MooseX::ConfigFromFile>
