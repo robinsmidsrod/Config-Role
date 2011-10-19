@@ -1,6 +1,8 @@
 Revision history for Config-Role
 
 {{$NEXT}}
+
+0.1.0     2011-10-19 20:38:59 Europe/Oslo
         - Improved documentation
         - Added config_dir attribute
         - Method/attribute config_filename in consuming class is now optional
