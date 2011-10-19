@@ -3,8 +3,7 @@
 use strict;
 use warnings;
 use rlib;
-use Test::More tests => 8;
-use Test::Exception;
+use Test::More tests => 9;
 
 # Mock home/config dir location
 {
@@ -16,9 +15,11 @@ use Test::Exception;
 my $obj = My::Class->new();
 isa_ok($obj, 'My::Class');
 can_ok($obj, qw(
+    config_dir
     config_file
     config
 ));
+is( $obj->config_dir, 't', 'config_dir attribute resolved correctly' );
 is( $obj->config_file, 't/.my_class.ini', 'config_file attribute resolved correctly' );
 is( ref($obj->config), ref({}), 'config attribute is a hashref' );
 is( $obj->username, 'robin', 'required attribute username found in config' );
