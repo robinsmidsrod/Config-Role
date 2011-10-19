@@ -34,12 +34,11 @@ coerce ArrayRefOfFile,
 
 =method config_filename
 
-Required method on the composing class. Should return a string with the name
-of the configuration file name.
+Optional attribute or method on the composing class. Should return a string
+with the name of the configuration file name.  See C<config_file> for
+how the default is calculated if this method is not available.
 
 =cut
-
-requires 'config_filename';
 
 =attr config_dir
 
@@ -64,7 +63,10 @@ sub _build_config_dir {
 =attr config_file
 
 The filename the configuration is read from. A Path::Class::File object.
-Allows coercion from Str.
+Allows coercion from Str.  Default is calculated based on the composing
+class name.  If your composing class is called C<My::Class> it will be
+C<.my_class.ini>.  Remember that if you sub-class the composing class, the
+default will be the name of the sub-class, not the super-class.
 
 =cut
 
@@ -77,8 +79,18 @@ has 'config_file' => (
 
 sub _build_config_file {
     my ($self) = @_;
+    my $config_filename = "";
+    if ( $self->can('config_filename') ) {
+        $config_filename = $self->config_filename;
+    }
+    else {
+        # Method taken from Catalyst::Utils->appprefix()
+        $config_filename = lc( $self->meta->name );
+        $config_filename =~ s/::/_/g;
+        $config_filename = ".${config_filename}.ini";
+    }
     return $self->config_dir->file(
-        $self->config_filename
+        $config_filename
     );
 }
 
@@ -135,11 +147,12 @@ __END__
 
     package My::Class;
     use Moose;
+    with 'Config::Role';
 
     # Read configuration from ~/.my_class.ini, available in $self->config
+    # This is optional if you like this particular naming of the file
     has 'config_filename' => ( is => 'ro', isa => 'Str', lazy_build => 1 );
     sub _build_config_filename { '.my_class.ini' }
-    with 'Config::Role';
 
     # Fetch a value from the configuration, allow constructor override
     has 'username' => ( is => 'ro', isa => 'Str', lazy_build => 1 );
@@ -211,11 +224,6 @@ Otherwise they are pretty similar in terms of what they do.
 =head1 TODO
 
 =over 4
-
-=item *
-
-Generate config_filename automatically from the compositing class. Get
-class name from compositing class, convert :: into _ and lowercase.
 
 =item *
 

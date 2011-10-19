@@ -10,11 +10,12 @@ version 0.1.0
 
     package My::Class;
     use Moose;
+    with 'Config::Role';
 
     # Read configuration from ~/.my_class.ini, available in $self->config
+    # This is optional if you like this particular naming of the file
     has 'config_filename' => ( is => 'ro', isa => 'Str', lazy_build => 1 );
     sub _build_config_filename { '.my_class.ini' }
-    with 'Config::Role';
 
     # Fetch a value from the configuration, allow constructor override
     has 'username' => ( is => 'ro', isa => 'Str', lazy_build => 1 );
@@ -70,7 +71,10 @@ Str.
 ## config_file
 
 The filename the configuration is read from. A Path::Class::File object.
-Allows coercion from Str.
+Allows coercion from Str.  Default is calculated based on the composing
+class name.  If your composing class is called `My::Class` it will be
+`.my_class.ini`.  Remember that if you sub-class the composing class, the
+default will be the name of the sub-class, not the super-class.
 
 ## config_files
 
@@ -87,8 +91,9 @@ specified files.
 
 ## config_filename
 
-Required method on the composing class. Should return a string with the name
-of the configuration file name.
+Optional attribute or method on the composing class. Should return a string
+with the name of the configuration file name.  See `config_file` for
+how the default is calculated if this method is not available.
 
 # COMPARISON TO [MooseX::ConfigFromFile](http://search.cpan.org/perldoc?MooseX::ConfigFromFile)
 
@@ -112,8 +117,6 @@ Otherwise they are pretty similar in terms of what they do.
 
 # TODO
 
-- Generate config_filename automatically from the compositing class. Get
-class name from compositing class, convert :: into _ and lowercase.
 - A nicely named sugar function could be exported to allow less boilerplate
 in generating attributes that default to config values.
 
