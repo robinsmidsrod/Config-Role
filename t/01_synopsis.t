@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use rlib;
 use Test::More tests => 9;
+use File::Spec;
 
 # Mock home/config dir location
 {
@@ -20,17 +21,17 @@ can_ok($obj, qw(
     config
 ));
 is( $obj->config_dir, 't', 'config_dir attribute resolved correctly' );
-is( $obj->config_file, 't/.my_class.ini', 'config_file attribute resolved correctly' );
+is( $obj->config_file, File::Spec->catfile('t', '.my_class.ini'), 'config_file attribute resolved correctly' );
 is( ref($obj->config), ref({}), 'config attribute is a hashref' );
 is( $obj->username, 'robin', 'required attribute username found in config' );
 
-my $obj2 = My::Class->new( config_file => 't/.missing.ini' );
+my $obj2 = My::Class->new( config_file => File::Spec->catfile('t', '.missing.ini') );
 is_deeply( $obj2->config, {}, 'missing config file should give empty config' );
 
 my $obj3 = My::Class->new(
     config_files => [
-        't/.my_class.ini',
-        't/.my_other_class.ini',
+        File::Spec->catfile('t', '.my_class.ini'),
+        File::Spec->catfile('t', '.my_other_class.ini'),
     ],
 );
 is( scalar @{ $obj3->config_files }, 2, "two config files specified" );

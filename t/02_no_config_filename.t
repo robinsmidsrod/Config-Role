@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use rlib;
 use Test::More tests => 6;
+use File::Spec;
 
 # Mock home/config dir location
 {
@@ -14,7 +15,7 @@ use Test::More tests => 6;
 
 my $obj = My::Class->new();
 isa_ok($obj, 'My::Class');
-is( $obj->config_file, 't/.my_class.ini', 'config_file attribute resolved correctly' );
+is( $obj->config_file, File::Spec->catfile('t', '.my_class.ini'), 'config_file attribute resolved correctly' );
 is( ref($obj->config), ref({}), 'config attribute is a hashref' );
 ok( exists $obj->config->{'username'}, 'config key username exists' );
 is( $obj->config->{'username'}, 'robin', 'config key username matches' );

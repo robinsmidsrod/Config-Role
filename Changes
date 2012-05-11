@@ -1,6 +1,7 @@
 Revision history for Config-Role
 
 {{$NEXT}}
+        - Fixed path separator test error on Win32
 
 0.1.0     2011-10-19 20:38:59 Europe/Oslo
         - Improved documentation
